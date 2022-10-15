@@ -1,3 +1,4 @@
+import pico2d
 from pico2d import *
 
 import game_framework
@@ -16,7 +17,8 @@ class Boy:
         self.x, self.y = 400, 90
         self.frame = 0
         self.base_frame = 0
-        self. dir = 0
+        self.dir = 0
+        self.jump = 0
         self.image = load_image('anisheet.png')
 
     def update(self):
@@ -24,20 +26,21 @@ class Boy:
         self.base_frame = (self.base_frame + 1) % 1
         self.x += self.dir * 1
 
+        if self.jump > 0:
+            self.jump -= 1
+
         if self.x > 800:
             self.x = 800
-            self.dir = -1
         elif self.x < 0:
             self.x = 0
-            self.dir = 1
 
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+            self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y + self.jump)
         elif self.dir == -1:
-            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y + self.jump)
         else:
-            self.image.clip_draw(self.base_frame * 100, 700, 100, 100, self.x, self.y)
+            self.image.clip_draw(self.base_frame * 100, 700, 100, 100, self.x, self.y + self.jump)
 
 
 def handle_events():
@@ -53,6 +56,10 @@ def handle_events():
                     boy.dir -= 1
                 case pico2d.SDLK_RIGHT:
                     boy.dir += 1
+                case pico2d.SDLK_SPACE:
+                    boy.jump += 100
+                case pico2d.SDLK_UP:
+                    boy.jump += 100
         elif event.type == SDL_KEYUP:
             match event.key:
                 case pico2d.SDLK_LEFT:
