@@ -1,5 +1,7 @@
 from pico2d import *
 
+import game_framework
+
 
 class Background:
     def __init__(self):
@@ -19,7 +21,7 @@ class Boy:
 
     def update(self):
         self.frame = (self.frame + 1) % 10
-        self.base_frame = (self.base_frame + 1) % 2
+        self.base_frame = (self.base_frame + 1) % 1
         self.x += self.dir * 1
 
         if self.x > 800:
@@ -39,15 +41,14 @@ class Boy:
 
 
 def handle_events():
-    global running
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_ESCAPE:
-                    running = False
+                    game_framework.quit()
                 case pico2d.SDLK_LEFT:
                     boy.dir -= 1
                 case pico2d.SDLK_RIGHT:
@@ -60,21 +61,30 @@ def handle_events():
                     boy.dir -= 1
 
 
-open_canvas()
-
-boy = Boy()
-background = Background()
-
+boy = None
+background = None
 running = True
 
-while running:
-    handle_events()
 
+def enter():
+    global boy, background, running
+    boy = Boy()
+    background = Background()
+    running = True
+
+
+def exit():
+    global boy, background, running
+    del boy
+    del background
+
+
+def update():
     boy.update()
 
+
+def draw():
     clear_canvas()
     background.draw()
     boy.draw()
     update_canvas()
-
-    delay(0.001)
