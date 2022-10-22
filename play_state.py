@@ -22,7 +22,7 @@ class Boy:
         self.image = load_image('anisheet.png')
 
     def update(self):
-        self.frame = (self.frame + 1) % 10
+        self.frame = (self.frame + 1) % 8
         self.base_frame = (self.base_frame + 1) % 1
         self.x += self.dir * 1
 
@@ -36,11 +36,11 @@ class Boy:
 
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y + self.jump)
+            self.image.clip_draw(self.frame * 96, 0, 96, 105, self.x, self.y + self.jump)
         elif self.dir == -1:
-            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y + self.jump)
+            self.image.clip_draw(self.frame * 96, 206, 96, 105, self.x, self.y + self.jump)
         else:
-            self.image.clip_draw(self.base_frame * 100, 700, 100, 100, self.x, self.y + self.jump)
+            self.image.clip_draw(self.base_frame * 96, 726, 96, 105, self.x, self.y + self.jump)
 
 
 def handle_events():
@@ -57,9 +57,9 @@ def handle_events():
                 case pico2d.SDLK_RIGHT:
                     boy.dir += 1
                 case pico2d.SDLK_SPACE:
-                    boy.jump += 100
+                    boy.jump += 150
                 case pico2d.SDLK_UP:
-                    boy.jump += 100
+                    boy.jump += 150
         elif event.type == SDL_KEYUP:
             match event.key:
                 case pico2d.SDLK_LEFT:
