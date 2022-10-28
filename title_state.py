@@ -4,6 +4,7 @@ import game_framework
 from pico2d import *
 image = None
 
+
 def enter():
     global image
     image = load_image('title.png')
@@ -29,7 +30,7 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    image.draw(400,300)
+    image.draw(400, 300)
     update_canvas()
 
 
