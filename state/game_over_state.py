@@ -1,35 +1,18 @@
+from state import play_state
 import game_framework
-from state import title_state
-from pico2d import *
 
+from pico2d import *
 image = None
-logo_time = 0.0
 
 
 def enter():
     global image
-    image = load_image('png/tuk_credit.png')
+    image = load_image('png/title.png')
 
 
 def exit():
     global image
     del image
-
-
-def update():
-    global logo_time
-    global running
-    if logo_time > 1.0:
-        logo_time = 0
-        game_framework.change_state(title_state)
-    delay(0.01)
-    logo_time += 0.01
-
-
-def draw():
-    clear_canvas()
-    image.draw(400, 300)
-    update_canvas()
 
 
 def handle_events():
@@ -43,5 +26,20 @@ def handle_events():
                     game_framework.quit()
 
 
+def draw():
+    clear_canvas()
+    image.draw(400, 300)
+    update_canvas()
 
+
+def update():
+    pass
+
+
+def pause():
+    pass
+
+
+def resume():
+    pass
 

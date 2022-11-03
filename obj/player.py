@@ -82,7 +82,7 @@ class Boy:
         self.frame = 0
         self.dir = 0
         self.jump = 0
-        self.image = load_image('png/boy.png')
+        self.image = load_image('png/player.png')
 
         self.event_que = []
         self.cur_state = IDLE

@@ -1,8 +1,8 @@
-import pico2d
 from pico2d import *
 import game_framework
+import game_world
 from obj.background import Background
-from obj.boy import Boy
+from obj.player import Boy
 
 
 def handle_events():
@@ -22,20 +22,20 @@ running = True
 
 
 def enter():
-    global boy, background, running
+    global boy, background
     boy = Boy()
     background = Background()
-    running = True
+    game_world.add_object(background, 0)
+    game_world.add_object(boy, 1)
 
 
 def exit():
-    global boy, background, running
-    del boy
-    del background
+    game_world.clear()
 
 
 def update():
-    boy.update()
+    for game_object in game_world.all_objects():
+        game_object.update()
 
 
 def draw():
