@@ -57,6 +57,10 @@ class RUN:
         self.x += self.dir
         self.x = clamp(0, self.x, 1140)
 
+        if self.y == 64:
+            self.sig = 0
+        elif self.sig == 1:
+            self.jump -= 1
 
     @staticmethod
     def draw(self):
@@ -78,6 +82,7 @@ class Player:
         self.frame = 0
         self.dir = 0
         self.jump = 0
+        self.sig = 0
         self.image = load_image('png/player.png')
 
         self.event_que = []
@@ -93,7 +98,9 @@ class Player:
             self.cur_state = next_state[self.cur_state][event]
             self.cur_state.enter(self, event)
 
-        if self.jump > 0:
+        if self.y == 64:
+            self.sig = 0
+        elif self.sig == 1:
             self.jump -= 1
 
     def draw(self):
@@ -110,10 +117,8 @@ class Player:
         if event.type == SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_SPACE:
-                    self.jump += 150
-                    if self.jump > 150:
-                        self.jump = 150
+                    if self.sig == 0:
+                        self.jump += 150
                 case pico2d.SDLK_UP:
-                    self.jump += 150
-                    if self.jump > 150:
-                        self.jump = 150
+                    if self.sig == 0:
+                        self.jump += 150
