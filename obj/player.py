@@ -1,4 +1,5 @@
 from pico2d import *
+import game_framework
 
 # 이벤트 정의
 RD, LD, RU, LU = range(4)
@@ -9,6 +10,18 @@ key_event_table = {
 (SDL_KEYUP, SDLK_RIGHT): RU,
 (SDL_KEYUP, SDLK_LEFT): LU
 }
+
+# 플레이어 이동 속도
+PIXEL_PER_METER = (10.0 / 0.16)  # 10 pixel 16 cm
+RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# 플레이어 액션 속도
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 
 class IDLE:
@@ -23,14 +36,11 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 8
-
-        if self.jump > 0:
-            self.jump -= 1
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
     def draw(self):
-        self.image.clip_draw(self.frame * 96, 312, 96, 104, self.x, self.y + self.jump)
+        self.image.clip_draw(int(self.frame) * 96, 312, 96, 104, self.x, self.y)
 
 
 class RUN:
@@ -53,21 +63,16 @@ class RUN:
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 8
-        self.x += self.dir
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 1140)
-
-        if self.y == 64:
-            self.sig = 0
-        elif self.sig == 1:
-            self.jump -= 1
 
     @staticmethod
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(self.frame * 96, 0, 96, 104, self.x, self.y + self.jump)
+            self.image.clip_draw(int(self.frame) * 96, 0, 96, 104, self.x, self.y)
         elif self.dir == -1:
-            self.image.clip_draw(self.frame * 96, 208, 96, 104, self.x, self.y + self.jump)
+            self.image.clip_draw(int(self.frame) * 96, 208, 96, 104, self.x, self.y)
 
 
 next_state = {
@@ -81,8 +86,6 @@ class Player:
         self.x, self.y = 400, 90
         self.frame = 0
         self.dir = 0
-        self.jump = 0
-        self.sig = 0
         self.image = load_image('png/player.png')
 
         self.event_que = []
@@ -98,27 +101,20 @@ class Player:
             self.cur_state = next_state[self.cur_state][event]
             self.cur_state.enter(self, event)
 
-        if self.y == 64:
-            self.sig = 0
-        elif self.sig == 1:
-            self.jump -= 1
-
     def draw(self):
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
         self.event_que.insert(0, event)
+
+    def get_bb(self):
+        return self.x - 40, self.y - 48, self.x + 40, self.y + 54
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
-        if event.type == SDL_KEYDOWN:
-            match event.key:
-                case pico2d.SDLK_SPACE:
-                    if self.sig == 0:
-                        self.jump += 150
-                case pico2d.SDLK_UP:
-                    if self.sig == 0:
-                        self.jump += 150
+    def handle_collision(self, other, group):
+        pass

@@ -1,18 +1,8 @@
-from state import play_state
-import game_framework
-
 from pico2d import *
-image = None
+import game_framework
+import game_world
 
-
-def enter():
-    global image
-    image = load_image('png/title.png')
-
-
-def exit():
-    global image
-    del image
+from obj.score import Score
 
 
 def handle_events():
@@ -20,26 +10,33 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN:
-            match event.key:
-                case pico2d.SDLK_ESCAPE:
-                    game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
 
 
-def draw():
-    clear_canvas()
-    image.draw(400, 300)
-    update_canvas()
+score = None
+
+
+def enter():
+    global score
+
+    score = Score()
+
+    game_world.add_object(score.image, 0)
+    game_world.add_object(score.font, 1)
+
+
+def exit():
+    game_world.clear()
 
 
 def update():
     pass
 
 
-def pause():
-    pass
+def draw():
+    clear_canvas()
+    score.draw()
+    update_canvas()
 
-
-def resume():
-    pass
 
