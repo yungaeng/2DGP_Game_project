@@ -1,7 +1,5 @@
-import pico2d
-
 import game_framework
-import title_state
+from state import title_state
 from pico2d import *
 
 image = None
@@ -10,7 +8,7 @@ logo_time = 0.0
 
 def enter():
     global image
-    image = load_image('tuk_credit.png')
+    image = load_image('png/tuk_credit.png')
 
 
 def exit():

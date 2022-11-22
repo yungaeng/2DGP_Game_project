@@ -1,8 +1,8 @@
 import pico2d
 from pico2d import *
 import game_framework
-from boy import Boy
-from background import Background
+from obj.background import Background
+from obj.boy import Boy
 
 
 def handle_events():

@@ -23,7 +23,7 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        self.base_frame = (self.base_frame + 1) % 1
+        self.frame = (self.frame + 1) % 8
 
         if self.jump > 0:
             self.jump -= 1
@@ -35,7 +35,7 @@ class IDLE:
 
     @staticmethod
     def draw(self):
-        self.image.clip_draw(self.base_frame * 96, 726, 96, 105, self.x, self.y + self.jump)
+        self.image.clip_draw(self.frame * 96, 312, 96, 104, self.x, self.y + self.jump)
 
 
 class RUN:
@@ -65,9 +65,9 @@ class RUN:
     @staticmethod
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(self.frame * 96, 0, 96, 105, self.x, self.y + self.jump)
+            self.image.clip_draw(self.frame * 96, 0, 96, 104, self.x, self.y + self.jump)
         elif self.dir == -1:
-            self.image.clip_draw(self.frame * 96, 206, 96, 105, self.x, self.y + self.jump)
+            self.image.clip_draw(self.frame * 96, 208, 96, 104, self.x, self.y + self.jump)
 
 
 next_state = {
@@ -80,10 +80,9 @@ class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
         self.frame = 0
-        self.base_frame = 0
         self.dir = 0
         self.jump = 0
-        self.image = load_image('anisheet.png')
+        self.image = load_image('png/boy.png')
 
         self.event_que = []
         self.cur_state = IDLE
@@ -121,5 +120,9 @@ class Boy:
             match event.key:
                 case pico2d.SDLK_SPACE:
                     self.jump += 150
+                    if self.jump > 150:
+                        self.jump = 150
                 case pico2d.SDLK_UP:
                     self.jump += 150
+                    if self.jump > 150:
+                        self.jump = 150

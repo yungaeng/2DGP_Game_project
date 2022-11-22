@@ -1,4 +1,4 @@
-import play_state
+from state import play_state
 import game_framework
 
 from pico2d import *
@@ -7,7 +7,7 @@ image = None
 
 def enter():
     global image
-    image = load_image('title.png')
+    image = load_image('png/title.png')
 
 
 def exit():
