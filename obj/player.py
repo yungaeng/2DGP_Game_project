@@ -28,11 +28,6 @@ class IDLE:
         if self.jump > 0:
             self.jump -= 1
 
-        if self.x > 800:
-            self.x = 800
-        elif self.x < 0:
-            self.x = 0
-
     @staticmethod
     def draw(self):
         self.image.clip_draw(self.frame * 96, 312, 96, 104, self.x, self.y + self.jump)
@@ -60,7 +55,8 @@ class RUN:
     def do(self):
         self.frame = (self.frame + 1) % 8
         self.x += self.dir
-        self.x = clamp(0, self.x, 800)
+        self.x = clamp(0, self.x, 1140)
+
 
     @staticmethod
     def draw(self):
@@ -76,7 +72,7 @@ next_state = {
 }
 
 
-class Boy:
+class Player:
     def __init__(self):
         self.x, self.y = 400, 90
         self.frame = 0
@@ -99,11 +95,6 @@ class Boy:
 
         if self.jump > 0:
             self.jump -= 1
-
-        if self.x > 800:
-            self.x = 800
-        elif self.x < 0:
-            self.x = 0
 
     def draw(self):
         self.cur_state.draw(self)

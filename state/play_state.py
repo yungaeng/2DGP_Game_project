@@ -1,8 +1,11 @@
 from pico2d import *
 import game_framework
 import game_world
+
 from obj.background import Background
-from obj.player import Boy
+from obj.background import Floor
+from obj.player import Player
+from obj.enemy import Enemy
 
 
 def handle_events():
@@ -13,20 +16,28 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
         else:
-            boy.handle_event(event)
+            player.handle_event(event)
 
 
-boy = None
+player = None
 background = None
-running = True
+floor = None
+enemy = None
 
 
 def enter():
-    global boy, background
-    boy = Boy()
+    global player, background, floor, enemy
+
+    player = Player()
     background = Background()
+    floor = Floor()
+    enemy = Enemy()
+
     game_world.add_object(background, 0)
-    game_world.add_object(boy, 1)
+    game_world.add_object(floor, 0)
+
+    game_world.add_object(enemy, 1)
+    game_world.add_object(player, 1)
 
 
 def exit():
@@ -40,6 +51,11 @@ def update():
 
 def draw():
     clear_canvas()
+
     background.draw()
-    boy.draw()
+    floor.draw()
+
+    player.draw()
+    enemy.draw()
+
     update_canvas()
