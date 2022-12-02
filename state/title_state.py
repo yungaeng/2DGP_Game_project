@@ -1,5 +1,5 @@
 from state import play_state
-import game_framework
+from game import game_framework
 
 from pico2d import *
 image = None

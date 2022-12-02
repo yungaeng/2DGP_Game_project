@@ -1,7 +1,6 @@
 from pico2d import *
 
-import game_framework
-import game_world
+from game import game_framework, game_world
 
 from obj.background import Background, Floor
 from obj.player import Player
@@ -47,7 +46,7 @@ def enter():
     game_world.add_object(player, 1)
 
     global all_enemy
-    all_enemy = [Enemy() for i in range(15)]
+    all_enemy = [Enemy() for i in range(10)]
     game_world.add_objects(all_enemy, 1)
 
     game_world.add_collision_pairs(player, all_enemy, 'player:enemy')

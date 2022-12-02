@@ -1,5 +1,5 @@
 from pico2d import *
-import game_framework
+from game import game_framework
 
 # 이벤트 정의
 RD, LD, RU, LU = range(4)
@@ -103,7 +103,6 @@ class Player:
 
     def draw(self):
         self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
         self.event_que.insert(0, event)

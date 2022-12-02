@@ -5,6 +5,9 @@ class Background:
     def __init__(self):
         self.image = load_image('png/background.png')
         self.font = load_font('font/ENCR10B.TTF', 20)
+        self.bgm = load_music('sound/bgm.mp3')
+        self.bgm.set_volume(25)
+        self.bgm.repeat_play()
 
     def draw(self):
         self.image.draw(570, 321)
@@ -20,7 +23,6 @@ class Floor:
 
     def draw(self):
         self.image.draw(570, 32)
-        draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return 0, 0, 1600 - 1, 63

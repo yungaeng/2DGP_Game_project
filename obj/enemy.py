@@ -1,12 +1,12 @@
 from pico2d import *
 import random
-import game_framework
+from game import game_framework
 from state import game_over_state
 
 
 class Enemy:
-    MIN_FALL_SPEED = 100
-    MAX_FALL_SPEED = 300
+    MIN_FALL_SPEED = 50
+    MAX_FALL_SPEED = 350
     image = None
 
     def __init__(self):
@@ -16,7 +16,6 @@ class Enemy:
 
     def draw(self):
         self.image.draw(self.x, self.y)
-        draw_rectangle(*self.get_bb())
 
     def update(self):
         self.y -= self.fall_speed * game_framework.frame_time
