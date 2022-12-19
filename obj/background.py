@@ -22,11 +22,12 @@ class Floor:
         self.image.draw(570, 32)
         draw_rectangle(*self.get_bb())
 
+    def get_bb(self):
+        return 0, 0, 1600 - 1, 63
+
     def handle_collision(self, other, group):
         pass
 
     def update(self):
         pass
 
-    def get_bb(self):
-        return 0, 0, 1600 - 1, 63

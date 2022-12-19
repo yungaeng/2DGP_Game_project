@@ -5,7 +5,7 @@ import game_world
 
 from obj.background import Background, Floor
 from obj.player import Player
-from obj.enemy import Enemy, FallEnemy
+from obj.enemy import Enemy
 
 background = None
 player = None
@@ -25,20 +25,30 @@ def collide(a, b):
     return True
 
 
+def handle_events():
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
+        else:
+            player.handle_event(event)
+
+
 def enter():
-    global background, floor, player, all_enemy
+    global background, floor, player
 
     background = Background()
     game_world.add_object(background, 0)
-
     floor = Floor()
     game_world.add_object(floor, 0)
-
     player = Player()
     game_world.add_object(player, 1)
 
-    all_enemy = [Enemy() for i in range(10)] + [FallEnemy() for i in range(10)]
-    game_world.add_object(all_enemy, 1)
+    global all_enemy
+    all_enemy = [Enemy() for i in range(15)]
+    game_world.add_objects(all_enemy, 1)
 
     game_world.add_collision_pairs(player, all_enemy, 'player:enemy')
     game_world.add_collision_pairs(floor, all_enemy, 'floor:enemy')
@@ -59,20 +69,13 @@ def update():
             b.handle_collision(a, group)
 
 
-def draw():
-    clear_canvas()
+def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()
+
+
+def draw():
+    clear_canvas()
+    draw_world()
     update_canvas()
-
-
-def handle_events():
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            game_framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
-        else:
-            player.handle_event(event)
 

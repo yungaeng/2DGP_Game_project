@@ -1,3 +1,4 @@
+
 objects = [[], []]
 collision_group = dict()
 
@@ -35,23 +36,24 @@ def clear():
 
 def add_collision_pairs(a, b, group):
     if group not in collision_group:
-        print('Add new group ', group)
-        collision_group[group] = [ [], [] ] # list of list : list pair
+        print('add new group')
+        collision_group[group] = [[], []]
 
     if a:
-        if type(b) is list:
-            collision_group[group][1] += b
+        if type(a) == list:
+            collision_group[group][0] += a
         else:
-            collision_group[group][1].append(b)
+            collision_group[group][0].append(a)
 
     if b:
-        if type(a) is list:
-            collision_group[group][0] += a
-        else:collision_group[group][0].append(a)
+            if type(b) == list:
+                collision_group[group][1] += b
+            else:
+                collision_group[group][1].append(b)
 
 
 def all_collision_pairs():
-    for group, pairs in collision_group.items():
+    for group, pairs in collision_group.items(): # ey, value 를 다 가져옴
         for a in pairs[0]:
             for b in pairs[1]:
                 yield a, b, group
@@ -61,5 +63,6 @@ def remove_collision_object(o):
     for pairs in collision_group.values():
         if o in pairs[0]:
             pairs[0].remove(o)
-        if o in pairs[1]:
+        elif o in pairs[1]:
             pairs[1].remove(o)
+

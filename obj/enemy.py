@@ -5,12 +5,14 @@ from state import game_over_state
 
 
 class Enemy:
+    MIN_FALL_SPEED = 100
+    MAX_FALL_SPEED = 300
     image = None
 
     def __init__(self):
         if Enemy.image == None:
             Enemy.image = load_image('png/enemy.png')
-        self.x, self.y, self.fall_speed = random.randint(100, 1040), 63, 0
+        self.x, self.y, self.fall_speed = random.randint(0, 1140), 610, random.randint(Enemy.MIN_FALL_SPEED, Enemy.MAX_FALL_SPEED)
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -24,16 +26,9 @@ class Enemy:
 
     def handle_collision(self, other, group):
         if group == 'floor:enemy':
-            self.fall_speed = 0
+            self.x = random.randint(0, 1140)
+            self.y = 610
         if group == 'player:enemy':
             game_framework.change_state(game_over_state)
 
 
-class FallEnemy(Enemy):
-
-        MIN_FALL_SPEED = 5  # 50 pps = 1.5 meter per sec
-        MAX_FALL_SPEED = 20  # 200 pps = 6 meter per sec
-
-        def __init__(self):
-            self.x, self.y, self.fall_speed = random.randint(0, 1140), 600, random.randint(
-                FallEnemy.MIN_FALL_SPEED, FallEnemy.MAX_FALL_SPEED)
